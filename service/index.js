@@ -305,3 +305,107 @@ const RoleBaseHoc = (WrappedComponent, allowedRoles) => {
 
 export default RoleBaseHoc;
 
+import { Navigate, Route, BrowserRouter as Router, Routes, } from "react-router-dom";
+
+const AppRoutes = () => {
+  const token = sessionStorage.getItem('token'); 
+  const isLoggedIn = sessionStorage.getItem("isAuth") == "true";
+
+  if (!isLoggedIn && !token) {
+    return (
+      <Router>
+        <Routes>
+          <Route path="/" element={<Auth />} />
+          <Route path="*" element={<Navigate replace to="/" />} />
+        </Routes>
+      </Router>
+    );
+  }
+
+  return (
+    <Router>
+      <NotificationProvider>
+      <SidebarHeader />
+      <Routes>
+        <Route path="/*" element={<ErrorPage />} />
+        <Route path="/not-access" element={<NotAcess />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        {/* ---------------------------PROFILE ROUTES --------------------------------------------*/}
+        <Route path="/profile" element={<Profile />} />
+        {/* -------------------------NOTIFICATION ROUTES -----------------------------------------*/}
+        <Route path="/notification" element={<Notification />} />
+        {/* ---------------USER LIST ROUTES ----------------------------------------------------- */}
+        <Route path="/user-list" element={RoleBaseHoc(UserList ,['super admin','vertical admin'])} />
+        <Route path="/add-user" element={RoleBaseHoc(AddUser  ,['super admin','vertical admin'])} />
+        <Route path="/view-user" element={RoleBaseHoc(ViewUser  ,['super admin','vertical admin'])} />
+        <Route path="/edit-user" element={RoleBaseHoc(EditUser  ,['super admin'])} />
+        {/* ---------------USER LIST ROUTES ----------------------------------------------------- */}
+        <Route path="/user-list-vertical-admin" element={RoleBaseHoc(UserListForVerticalAdmin ,['vertical admin'])} />
+        <Route path="/view-user-vertical-admin" element={RoleBaseHoc(ViewVerticalAdminUser  ,['vertical admin'])} />
+        <Route path="/edit-user-vertical-admin" element={RoleBaseHoc(EditVerticalAdminUser  ,['vertical admin'])} />
+        {/* ------------------STATE LIST ROUTES------------------------------------------------- */}
+        <Route path="/vertical-admin-list" element={RoleBaseHoc(VerticalAdminList  ,['super admin'])} />
+        {/* <Route path="/add-state-list" element={RoleBaseHoc(AddVerticalAdminList  ,['super admin'])} /> */}
+        <Route path="/view-state-list" element={RoleBaseHoc(ViewVerticalAdminList  ,['super admin'])} />
+        <Route path="/edit-state-list" element={RoleBaseHoc(EditVerticalAdminList  ,['super admin'])} />
+        {/* ------------------------MASTER ROUTES ---------------------------------------------- */}
+        <Route path="/master" element={RoleBaseHoc(Master ,['super admin'])} />
+        <Route path="/vertical-admin-master" element={RoleBaseHoc(VerticalAdmin ,['super admin'])} />
+        {/* ---------------------------MECHINE ROUTES -------------------------------------------*/}
+        <Route path="/machine" element={RoleBaseHoc(Machine ,['super admin'])} />
+        <Route path="/add-new-machine" element={RoleBaseHoc(AddNewMachine ,['super admin'])} />
+        <Route path="/view-machine" element={RoleBaseHoc(ViewMachine ,['super admin'])} />
+        <Route path="/edit-machine" element={RoleBaseHoc(EditMachine ,['super admin'])} />
+        {/* ---------------------------SPARE ROUTES ---------------------------------------------*/}
+        <Route path="/spare-part" element={RoleBaseHoc(SparePart ,['super admin'])} />
+        <Route path="/add-new-spare" element={RoleBaseHoc(AddSparePart ,['super admin'])} />
+        <Route path="/view-spare" element={RoleBaseHoc(ViewSparePart ,['super admin'])} />
+        <Route path="/edit-spare" element={RoleBaseHoc(EditSparePart ,['super admin'])} />
+
+        {/* ---------------------------------COMPLAIN CATEGORY ROUTES----------------------------*/}
+        <Route path="/complain-category" element={RoleBaseHoc(ComplainCategory  ,['super admin'])} />
+        <Route path="/add-complain-category" element={RoleBaseHoc(AddComplianCategory  ,['super admin'])} />
+        <Route path="/edit-complain-category"element={RoleBaseHoc(EditComplianCategory ,['super admin'])} />
+        {/* -------------------------COMPLAIN Type ROUTES----------------------------------------*/}
+        <Route path="/complain-type" element={RoleBaseHoc(ComplainType  ,['super admin'])} />
+        <Route path="/add-complain-type" element={RoleBaseHoc(AddCompliantType  ,['super admin'])} />
+        <Route path="/edit-complain-type" element={RoleBaseHoc(EditCompliantType  ,['super admin'])} />
+        {/* -------------------------PRODUCT ROUTES----------------------------------------------*/}
+        <Route path="/products" element={RoleBaseHoc(Product  ,['super admin'])} />
+        <Route path="/add-products" element={RoleBaseHoc(AddProduct  ,['super admin'])} />
+        <Route path="/edit-products" element={RoleBaseHoc(EditProduct  ,['super admin'])} />
+       {/* ---------------------------Complaints ROUTES ----------------------------------------*/}
+        <Route path="/all-complaints" element={RoleBaseHoc(Complaints ,['super admin','vertical admin','dealer',"employee"])} />
+        <Route path="/view-complaints" element={RoleBaseHoc(ViewComplaints ,['super admin','vertical admin','dealer',"employee"])} />
+        <Route path="/edit-complaints" element={RoleBaseHoc(EditComplaints ,['super admin','dealer'])} />
+       {/* ---------------------------Dealers ROUTES ----------------------------------------*/}
+        <Route path="/dealer-list" element={RoleBaseHoc(Dealers ,['vertical admin'])} />
+        <Route path="/add-dealer" element={RoleBaseHoc(AddDealer ,['vertical admin'])} />
+        <Route path="/view-dealer" element={RoleBaseHoc(ViewDealer ,['vertical admin'])} />
+        <Route path="/edit-dealer" element={RoleBaseHoc(EditDealer ,['vertical admin'])} />
+       {/* ------------------Technicians LIST ROUTES------------------------------------------------- */}
+        <Route path="/technicians-list" element={RoleBaseHoc(TechniciansList  ,['dealer'])} />
+        <Route path="/add-technician" element={RoleBaseHoc(AddTechniciansList  ,['dealer'])} />
+        <Route path="/view-technician" element={RoleBaseHoc(ViewTechniciansList  ,['dealer'])} />
+        <Route path="/edit-technician" element={RoleBaseHoc(EditTechniciansList  ,['dealer'])} />
+         {/* ------------------Enquiry LIST ROUTES------------------------------------------------- */}
+       <Route path="/enquiries" element={RoleBaseHoc(AllEnquiries  ,['dealer'])} />
+       <Route path="/machine-enquiries" element={RoleBaseHoc(MachinePart  ,['dealer'])} />
+       <Route path="/view-machine-enquiries" element={RoleBaseHoc(ViewMachineEnquiry  ,['dealer'])} />
+       <Route path="/edit-machine-enquiries" element={RoleBaseHoc(EditMachineEnquiry  ,['dealer'])} />
+       <Route path="/spare-parts-enquiries" element={RoleBaseHoc(SparePartEnquiry  ,['dealer'])} />
+       <Route path="/view-spare-enquiries" element={RoleBaseHoc(ViewSpareEnquiries  ,['dealer'])} />
+       <Route path="/edit-spare-enquiries" element={RoleBaseHoc(EditSpareEnquiries  ,['dealer'])} />
+       {/* ------------------Technicians LIST ROUTES------------------------------------------------- */}
+       <Route path="/revisit-request" element={RoleBaseHoc(RevisitRequest  ,['dealer'])} />
+       <Route path="/view-revisit-request" element={RoleBaseHoc(ViewRevistRequest  ,['dealer'])} />
+       <Route path="/edit-revisit-request" element={RoleBaseHoc(EditRevisitRequest  ,['dealer'])} />
+       {/* ------------------CUSTOMER LIST ROUTES------------------------------------------------- */}
+       <Route path="/all-customer" element={RoleBaseHoc(CustomerList  ,['dealer'])} />
+       <Route path="/view-customer" element={RoleBaseHoc(ViewCustomerList  ,['dealer'])} />
+      </Routes>
+      </NotificationProvider>
+    </Router>
+  );
+};
+
