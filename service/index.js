@@ -126,6 +126,22 @@ class Service {
     return callback(response);
   }
 
+  export const login = async (formData, callback, callbackerror) => {
+    await Service.postUser("login", formData, async (response) => {
+        return callback(response)
+    }).catch((error) => {
+        return callbackerror(error);
+    })
+  }
+
+export const getDashboardData = async( callback , callbackerror) =>{
+    await Service.get('dashboard' , async(status,response) =>{
+        return callback(status,response)
+    }).catch((error) =>{
+        return callbackerror(error)
+    })
+}
+
   async put(path, payload, callback) {
     let response = await this.service.request({
       method: "PUT",
