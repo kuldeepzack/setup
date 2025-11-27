@@ -1,3 +1,6 @@
+
+
+
 import axios from "axios";
 const adminUrl = import.meta.env.VITE_ADMIN_API_BASE;
 const userUrl = import.meta.env.VITE_USER_API_BASE;
@@ -142,6 +145,31 @@ export const getDashboardData = async( callback , callbackerror) =>{
     })
 }
 
+
+    await login(payload,(res) => {
+        if (res?.data?.meta?.status === "success") {
+          sessionStorage.setItem("isAuth", true);
+          sessionStorage.setItem("role", res?.data?.data?.user?.roles?.[0]);
+          sessionStorage.setItem("token", res?.data?.data?.token);
+          sessionStorage.setItem("user", JSON.stringify(res?.data?.data?.user));
+          sessionStorage.setItem("name",  res?.data?.data?.user?.name);
+          notify(res?.data?.meta?.message);
+          let redirectTo = "";
+          redirectTo = "/dashboard";
+          window.location.href = redirectTo;
+          setIsLoading(false);
+        } else {
+          notify(res?.data?.meta?.message, "danger");
+          setIsLoading(false);
+        }
+      },
+      (error) => {
+        notify(error?.response?.data?.meta?.message, "danger");
+        setIsLoading(false);
+      }
+    );
+
+  
   async put(path, payload, callback) {
     let response = await this.service.request({
       method: "PUT",
